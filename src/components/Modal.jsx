@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { toFirstCharUppercase } from "./constants";
 import axios from "axios";
 import './css/modal.css';
 import TypeColor from './Services/TypeColors';

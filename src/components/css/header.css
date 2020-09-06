@@ -2,3 +2,21 @@
     width: 500px;
     height: 200px;
 }
+.button-search{
+    padding: 2%;
+    border-radius: 5px;
+    border-style: none;
+}
+/* --------- Media Query --------- */
+@media (max-width:768px){
+
+    .img-pokemon{
+        width: 100%;
+        height: 200px;
+    }
+
+    .button-search{
+        margin-top: 15px;
+        width: 90%;
+    }
+}

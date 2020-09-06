@@ -12,7 +12,7 @@ export default function Header({change}) {
                     <img className="img-pokemon" src={ImgPokemon} alt=""/>
                 </div>
                 <div>
-                    <input type="text" placeholder="search to pokemon" onChange={change}/>
+                    <input className="button-search" type="text" placeholder="search to pokemon" onChange={change}/>
                 </div>
             </header>
         </div>

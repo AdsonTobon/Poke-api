@@ -66,6 +66,11 @@ export default function Cards(props) {
            getPokemonCard(pokemonId))}
            
         </div>
+        <div>
+          <footer className="footer">
+            <b> <span className="create">Create by:</span></b>   2020 | Camilo Castañeda | Anderson Tobon 
+          </footer>
+        </div>
       </div>
         
     )
