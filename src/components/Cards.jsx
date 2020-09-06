@@ -1,56 +1,72 @@
 import React, { useState, useEffect } from 'react'
-import { getPokemon, getAllPokemon } from './Services/pokemon';
+import './css/card.css';
+import axios from "axios";
+import Header from './Header';
 
-export default function Cards() {
+export default function Cards(props) {
 
-    
-    const [pokemonData, setPokemonData] = useState([])
-    // const [loading, setLoading] = useState(true);
+    const {history} = props;
+    const [pokemonData, setPokemonData] = useState({})
+    const [filter, setFilter] = useState("")
     const initialURL = 'https://pokeapi.co/api/v2/pokemon/?limit=25'
 
+  const handleSearchChange =(e) =>{
+    setFilter(e.target.value);
+  };
+
     useEffect(() => {
-        async function fetchData() {
-          let response = await getAllPokemon(initialURL)
-          await loadPokemon(response.results);
-        //   setLoading(false);
-        }
-        fetchData();
-      }, [])
+      axios
+        .get(initialURL)
+        .then(function (response) {
+          const { data } = response;
+          const { results } = data;
+          const newData = {};
+          results.forEach((pokemon, index) => {
+            newData[index + 1] = {
+              id: index + 1,
+              name: pokemon.name,
+              sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                index + 1
+              }.png`,
+              
+            };
+          });
+          setPokemonData(newData);
+          console.log(newData)
+        });
+    }, []);
 
     
-      const loadPokemon = async (data) => {
-        let _pokemonData = await Promise.all(data.map(async pokemon => {
-          let pokemonRecord = await getPokemon(pokemon)
-          return pokemonRecord
-        }))
-        setPokemonData(_pokemonData);
-      }
-    
+
+    const getPokemonCard = (pokemonId) => {
+      const { id, name, sprite } = pokemonData[pokemonId];
+      
+      return (
+        <div className="container-cards" key={pokemonId} >
+        
+             <div className="card" onClick={() => history.push(`/${id}`)}>
+                    <div className="container-card-img"><img src={sprite} alt="imagen pokemon"/></div>
+                    <div className="card-name">{name.toUpperCase()}</div>
+                    <div className="card-ID">{id}</div>
+                   
+              </div>
+            
+        
+     </div>
+      );
+    };
       
     return (
-        <div>
-           <table>
-                <thead>
-                    <tr>
-                        <th>Numero</th>
-                        <th>Nombre</th>
-                        <th>Foto</th>
-                        <th>Tipo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        pokemonData.map((poken,index)=>{
-                            return <tr key={index}> 
-                                <td>{poken.id}</td>
-                                <td>{poken.name}</td>
-                                <td><img src={poken.sprites.front_default} alt="imagen pokemon"/> </td>
-                        <td><ul>{poken.types.map((tag,i) =><li key={i}>{tag.type.name}</li>)}</ul></td>
-                            </tr>
-                        
-                    })}
-                </tbody>
-            </table>
+      <div className="principal">
+        <Header change={handleSearchChange}/>
+        <div className="container-cards">
+           
+           {Object.keys(pokemonData).map((pokemonId)=> 
+           pokemonData[pokemonId].name.includes(filter) &&
+           getPokemonCard(pokemonId))}
+           
         </div>
+      </div>
+        
     )
 }
